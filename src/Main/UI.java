@@ -2,6 +2,8 @@ package Main;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class UI {
     GameManager gm;
@@ -14,7 +16,7 @@ public class UI {
         this.gm = gm;
 
         createMainField();
-        createBackground();
+        generateScreen();
 
         window.setVisible(true);
     }
@@ -37,19 +39,65 @@ public class UI {
         window.add(messageText);
     }
 
-    public void createBackground() {
-        bgPanel[1] = new JPanel();
-        bgPanel[1].setBounds(50, 50, 700, 350);
-        bgPanel[1].setBackground(Color.blue);
-        bgPanel[1].setLayout(null);
+    public void createBackground(int bgNum, String bgFileName) {
+        bgPanel[bgNum] = new JPanel();
+        bgPanel[bgNum].setBounds(50, 50, 700, 350);
+        bgPanel[bgNum].setBackground(Color.blue);
+        bgPanel[bgNum].setLayout(null);
         window.add(bgPanel[1]);
 
-        bgLabel[1] = new JLabel();
-        bgLabel[1].setBounds(0, 0, 700, 350);
+        bgLabel[bgNum] = new JLabel();
+        bgLabel[bgNum].setBounds(0, 0, 700, 350);
 
-        ImageIcon bgIcon = new ImageIcon(getClass().getClassLoader().getResource("greenbg700x350.png"));
-        bgLabel[1].setIcon(bgIcon);
+        ImageIcon bgIcon = new ImageIcon(getClass().getClassLoader().getResource(bgFileName));
+        bgLabel[bgNum].setIcon(bgIcon);
 
-        bgPanel[1].add(bgLabel[1]);
+        
+    }
+
+    public void createObject(int bgNum, int objx, int objy, int objwidth, int objheight, String objFileName, String choice1Name, String choice2Name, String choice3Name) {
+        // Create pop menu
+        JPopupMenu popMenu = new JPopupMenu();
+
+        // Create pop menu items
+        JMenuItem menuItem[] = new JMenuItem[4]; // Use [1,2,3]
+        menuItem[1] = new JMenuItem(choice1Name);
+        popMenu.add(menuItem[1]);
+
+        menuItem[2] = new JMenuItem(choice2Name);
+        popMenu.add(menuItem[2]);
+
+        menuItem[3] = new JMenuItem(choice3Name);
+        popMenu.add(menuItem[3]);
+
+        // Create objects
+        JLabel objectLabel = new JLabel();
+        objectLabel.setBounds(objx, objy, objwidth, objheight);
+
+        ImageIcon objectIcon = new ImageIcon(getClass().getClassLoader().getResource(objFileName));
+        objectLabel.setIcon(objectIcon);
+
+        objectLabel.addMouseListener(new MouseListener() {
+            public void mouseClicked(MouseEvent e) {}
+            public void mousePressed(MouseEvent e) {
+                if(SwingUtilities.isRightMouseButton(e)) {
+                    popMenu.show(objectLabel, e.getX(), e.getY());
+                }
+            }
+            public void mouseReleased(MouseEvent e) {}
+            public void mouseEntered(MouseEvent e) {}
+            public void mouseExited(MouseEvent e) {}
+        });
+
+        bgPanel[bgNum].add(objectLabel); // places hut
+        bgPanel[bgNum].add(bgLabel[bgNum]); // places background
+    }
+
+    public void generateScreen() {
+        // Screen1
+        createBackground(1, "greenbg700x350.png");
+        createObject(1, 440, 140, 200, 200, "hut 200x200.png", "Look", "Talk", "Rest");
+        createObject(1, 70, 180, 150, 150, "guard 150x150.png", "Look", "Talk", "Attack");
+        createObject(1, 310, 280, 70, 70, "chest 70x70.png", "Look", "Talk", "Open");
     }
 }
