@@ -55,19 +55,26 @@ public class UI {
         
     }
 
-    public void createObject(int bgNum, int objx, int objy, int objwidth, int objheight, String objFileName, String choice1Name, String choice2Name, String choice3Name) {
+    public void createObject(int bgNum, int objx, int objy, int objwidth, int objheight, String objFileName,
+    String choice1Name, String choice2Name, String choice3Name, String choice1Command, String choice2Command, String choice3Command) {
         // Create pop menu
         JPopupMenu popMenu = new JPopupMenu();
 
         // Create pop menu items
         JMenuItem menuItem[] = new JMenuItem[4]; // Use [1,2,3]
         menuItem[1] = new JMenuItem(choice1Name);
+        menuItem[1].addActionListener(gm.aHandler);
+        menuItem[1].setActionCommand(choice1Command);
         popMenu.add(menuItem[1]);
 
         menuItem[2] = new JMenuItem(choice2Name);
+        menuItem[2].addActionListener(gm.aHandler);
+        menuItem[2].setActionCommand(choice2Command);
         popMenu.add(menuItem[2]);
 
         menuItem[3] = new JMenuItem(choice3Name);
+        menuItem[3].addActionListener(gm.aHandler);
+        menuItem[3].setActionCommand(choice3Command);
         popMenu.add(menuItem[3]);
 
         // Create objects
@@ -96,8 +103,8 @@ public class UI {
     public void generateScreen() {
         // Screen1
         createBackground(1, "greenbg700x350.png");
-        createObject(1, 440, 140, 200, 200, "hut 200x200.png", "Look", "Talk", "Rest");
-        createObject(1, 70, 180, 150, 150, "guard 150x150.png", "Look", "Talk", "Attack");
-        createObject(1, 310, 280, 70, 70, "chest 70x70.png", "Look", "Talk", "Open");
+        createObject(1, 440, 140, 200, 200, "hut 200x200.png", "Look", "Talk", "Rest", "lookHut", "talkHut", "restHut");
+        createObject(1, 70, 180, 150, 150, "guard 150x150.png", "Look", "Talk", "Attack", "lookGuard", "talkGuard", "attackGuard");
+        createObject(1, 310, 280, 70, 70, "chest 70x70.png", "Look", "Talk", "Open", "lookChest", "talkChest", "openChest");
     }
 }
