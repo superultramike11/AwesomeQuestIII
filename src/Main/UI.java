@@ -16,7 +16,7 @@ public class UI {
         this.gm = gm;
 
         createMainField();
-        generateScreen();
+        generateScene();
 
         window.setVisible(true);
     }
@@ -44,15 +44,13 @@ public class UI {
         bgPanel[bgNum].setBounds(50, 50, 700, 350);
         bgPanel[bgNum].setBackground(Color.blue);
         bgPanel[bgNum].setLayout(null);
-        window.add(bgPanel[1]);
+        window.add(bgPanel[bgNum]);
 
         bgLabel[bgNum] = new JLabel();
         bgLabel[bgNum].setBounds(0, 0, 700, 350);
 
         ImageIcon bgIcon = new ImageIcon(getClass().getClassLoader().getResource(bgFileName));
-        bgLabel[bgNum].setIcon(bgIcon);
-
-        
+        bgLabel[bgNum].setIcon(bgIcon);        
     }
 
     public void createObject(int bgNum, int objx, int objy, int objwidth, int objheight, String objFileName,
@@ -80,6 +78,8 @@ public class UI {
         // Create objects
         JLabel objectLabel = new JLabel();
         objectLabel.setBounds(objx, objy, objwidth, objheight);
+        //objectLabel.setOpaque(true);
+        //objectLabel.setBackground(Color.blue);
 
         ImageIcon objectIcon = new ImageIcon(getClass().getClassLoader().getResource(objFileName));
         objectLabel.setIcon(objectIcon);
@@ -97,14 +97,37 @@ public class UI {
         });
 
         bgPanel[bgNum].add(objectLabel); // places hut
-        bgPanel[bgNum].add(bgLabel[bgNum]); // places background
     }
 
-    public void generateScreen() {
-        // Screen1
+    public void createArrowButton(int bgNum, int x, int y, int width, int height, String arrowFileName, String command) {
+        ImageIcon arrowIcon = new ImageIcon(getClass().getClassLoader().getResource(arrowFileName));
+        JButton arrowButton = new JButton();
+        arrowButton.setBounds(x, y, width, height);
+        arrowButton.setBackground(null);
+        arrowButton.setContentAreaFilled(false);
+        arrowButton.setFocusPainted(false);
+        arrowButton.setIcon(arrowIcon);
+        arrowButton.addActionListener(gm.aHandler);
+        arrowButton.setActionCommand(command);
+        arrowButton.setBorderPainted(false);
+
+        bgPanel[bgNum].add(arrowButton);
+    }
+
+    public void generateScene() {
+        // Scene 1
         createBackground(1, "greenbg700x350.png");
         createObject(1, 440, 140, 200, 200, "hut 200x200.png", "Look", "Talk", "Rest", "lookHut", "talkHut", "restHut");
         createObject(1, 70, 180, 150, 150, "guard 150x150.png", "Look", "Talk", "Attack", "lookGuard", "talkGuard", "attackGuard");
         createObject(1, 310, 280, 70, 70, "chest 70x70.png", "Look", "Talk", "Open", "lookChest", "talkChest", "openChest");
+        createArrowButton(1, 0, 150, 50, 50, "leftarrow 50x50.png", "goScene2");
+        bgPanel[1].add(bgLabel[1]); // places background
+    
+        // Scene 2
+        createBackground(2, "cave 700x350.jpg");
+        createObject(2, 0, 100, 100, 300, "blank.png", "Look", "Talk", "Enter", "lookCave", "talkCave", "enterCave");
+        createObject(2, 355, 250, 50, 50, "blank.png", "Look", "Talk", "Search", "lookRoot", "talkRoot", "searchRoot");
+        createArrowButton(2, 650, 150, 50, 50, "rightarrow 50x50.png", "goScene1");
+        bgPanel[2].add(bgLabel[2]);
     }
 }
